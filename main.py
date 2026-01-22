@@ -39,6 +39,9 @@ def rand_species():
     return random.choice(species)
 
 def rand_movies(how_much=50):
+    """
+    Function use library random to rand a fake title of a film, integer and append data to movies list.
+    """
     movies = []
 
     for i in range(how_much):
@@ -81,6 +84,9 @@ def generate_views():
     return generated_view
 
 def multiple_views(times=10):
+    """
+    Function use while loop to activate function generate_views ten times. While list watched will have 10 records loop will work. If film not in watched list it will be append.
+    """
     watched = []
 
     while(len(watched)<times):
