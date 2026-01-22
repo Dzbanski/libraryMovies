@@ -1,5 +1,6 @@
 from faker import Faker
 import random
+import datetime
 
 fake = Faker('pl_PL')
 
@@ -15,7 +16,7 @@ class Movies():
         self.number_play += 1
 
     def __str__(self):
-        return f'{self.title} {self.release}'
+        return f'{self.title} ({self.release}) {self.number_play}'
     
 class Series(Movies):
     def __init__(self, title, release, species, season, episode, number_play=0):
@@ -37,7 +38,7 @@ def rand_species():
     ]
     return random.choice(species)
 
-def rand_movies(how_much=10):
+def rand_movies(how_much=50):
     movies = []
 
     for i in range(how_much):
@@ -47,7 +48,7 @@ def rand_movies(how_much=10):
         movies.append(Movies(title, release, species))
     return movies
 
-def rand_series(how_muc = 10, much_season = 8, much_episode = 12):
+def rand_series(how_muc = 50, much_season = 8, much_episode = 12):
     series = []
 
     for y in range(how_muc):
@@ -73,9 +74,65 @@ def get_series():
     seriess = [k for k in list_of_films if isinstance(k, Series)]
     series_sorted = sorted(seriess, key=lambda x: x.title)
     return series_sorted
- 
-wynik = get_movies()
-wynik2 = get_series()
 
-for word in wynik2:
-    print(word)
+def generate_views():
+    generated_view = random.choice(list_of_films)
+    generated_view.number_play += random.randint(0,100)
+    return generated_view
+
+def multiple_views(times=10):
+    watched = []
+
+    while(len(watched)<times):
+        film = generate_views()
+        if film not in watched :
+            watched.append(film)
+
+    return watched
+
+def search():
+
+    tytul = input("Podaj tytuł filmu:").lower()
+
+    for film in list_of_films:
+        if tytul in film.title.lower():
+            return film
+        
+    return f'There is no such a movie or serie'
+
+def top_titles(content_type="movies"):
+   x = datetime.datetime.now()
+   print("Najpopularniejsze filmy i seriale dnia", x.strftime("%d.%m.%Y"))
+
+   if content_type == "movies":
+        titles_top = [t for t in get_movies()]
+        sorted_titles = sorted(titles_top, key=lambda x: x.number_play, reverse=True)
+        return sorted_titles[:3]
+   else:
+       titles_top = [t for t in get_series()]
+       sorted_titles = sorted(titles_top, key=lambda x: x.number_play, reverse=True)
+       return sorted_titles[:3]
+   
+def add_series(title, release, species, season, num_i, number_play=0):
+    for i in range(1, num_i+1):
+        list_of_films.append(Series(title, release, species, season, i, number_play))
+        
+def count_episodes(title):
+
+    count = 0
+    for i in list_of_films:
+        if i.title.lower() == title.lower():
+            count += 1
+    return count
+
+if __name__ == "__main__":
+    print("Biblioteka filmów")
+
+    watched = multiple_views(10)
+
+    for film in watched:
+     print(film)
+
+    for z in top_titles("movies"):
+        print(z)
+
