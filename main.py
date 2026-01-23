@@ -16,7 +16,7 @@ class Movies():
         self.number_play += 1
 
     def __str__(self):
-        return f'{self.title} ({self.release}) {self.number_play}'
+            return f'{self.title} ({self.release}) {self.number_play}'
     
 class Series(Movies):
     def __init__(self, title, release, species, season, episode, number_play=0):
@@ -25,8 +25,9 @@ class Series(Movies):
         self.episode = episode
         
     def __str__(self):
-        return f'{self.title} S{self.season:02d}E{self.episode:02d}'
+            return f'{self.title} S{self.season:02d}E{self.episode:02d} {self.number_play}'
 
+    
 def rand_species():
     species = [
         "Action",
@@ -63,82 +64,82 @@ def rand_series(how_muc = 50, much_season = 8, much_episode = 12):
         series.append(Series(title, release, species, season, episode))
     return series
 
-
-list_of_films = []
-list_of_films.extend(rand_movies())
-list_of_films.extend(rand_series())
-
-def get_movies():
-    moviess = [z for z in list_of_films if not isinstance(z, Series)]
+def get_movies(films):
+    moviess = [z for z in films if not isinstance(z, Series)]
     movies_sorted = sorted(moviess, key=lambda x: x.title)
     return movies_sorted
 
-def get_series():
-    seriess = [k for k in list_of_films if isinstance(k, Series)]
+def get_series(films):
+    seriess = [k for k in films if isinstance(k, Series)]
     series_sorted = sorted(seriess, key=lambda x: x.title)
     return series_sorted
 
-def generate_views():
-    generated_view = random.choice(list_of_films)
+def generate_views(films):
+    generated_view = random.choice(films)
     generated_view.number_play += random.randint(0,100)
     return generated_view
 
-def multiple_views(times=10):
+def multiple_views(films, times=10):
     """
     Function use while loop to activate function generate_views ten times. While list watched will have 10 records loop will work. If film not in watched list it will be append.
     """
     watched = []
 
     while(len(watched)<times):
-        film = generate_views()
+        film = generate_views(films)
         if film not in watched :
             watched.append(film)
 
     return watched
 
-def search():
+def search(films):
 
     tytul = input("Podaj tytuł filmu:").lower()
 
-    for film in list_of_films:
+    for film in films:
         if tytul in film.title.lower():
             return film
         
     return f'There is no such a movie or serie'
 
-def top_titles(content_type="movies"):
+def top_titles(films, content_type="movies"):
    x = datetime.datetime.now()
    print("Najpopularniejsze filmy i seriale dnia", x.strftime("%d.%m.%Y"))
 
    if content_type == "movies":
-        titles_top = [t for t in get_movies()]
+        titles_top = [t for t in get_movies(films)]
         sorted_titles = sorted(titles_top, key=lambda x: x.number_play, reverse=True)
         return sorted_titles[:3]
    else:
-       titles_top = [t for t in get_series()]
+       titles_top = [t for t in get_series(films)]
        sorted_titles = sorted(titles_top, key=lambda x: x.number_play, reverse=True)
        return sorted_titles[:3]
    
-def add_series(title, release, species, season, num_i, number_play=0):
+def add_series(films, title, release, species, season, num_i, number_play=0):
     for i in range(1, num_i+1):
-        list_of_films.append(Series(title, release, species, season, i, number_play))
+        films.append(Series(title, release, species, season, i, number_play))
         
-def count_episodes(title):
+def count_episodes(films, title):
 
     count = 0
-    for i in list_of_films:
+    for i in films:
         if i.title.lower() == title.lower():
             count += 1
     return count
 
 if __name__ == "__main__":
-    print("Biblioteka filmów")
 
-    watched = multiple_views(10)
+    list_of_films = []
+    list_of_films.extend(rand_movies())
+    list_of_films.extend(rand_series())
+
+    print("Biblioteka filmów")
+    
+    watched = multiple_views(list_of_films, 10)
 
     for film in watched:
      print(film)
 
-    for z in top_titles("movies"):
+    for z in top_titles(list_of_films, "series"):
         print(z)
 
