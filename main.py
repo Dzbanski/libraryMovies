@@ -106,14 +106,14 @@ def top_titles(films, content_type="movies"):
    x = datetime.datetime.now()
    print("Najpopularniejsze filmy i seriale dnia", x.strftime("%d.%m.%Y"))
 
-   if content_type == "movies":
-        titles_top = [t for t in get_movies(films)]
-        sorted_titles = sorted(titles_top, key=lambda x: x.number_play, reverse=True)
-        return sorted_titles[:3]
+   if content_type == "movies": 
+        sorted_titles = get_movies(films)
    else:
-       titles_top = [t for t in get_series(films)]
-       sorted_titles = sorted(titles_top, key=lambda x: x.number_play, reverse=True)
-       return sorted_titles[:3]
+       sorted_titles = get_series(films)
+                        
+   return sorted(sorted_titles, key=lambda x: x.numer_play, reverse=True)[:3]
+
+    
    
 def add_series(films, title, release, species, season, num_i, number_play=0):
     for i in range(1, num_i+1):
@@ -134,12 +134,14 @@ if __name__ == "__main__":
     list_of_films.extend(rand_series())
 
     print("Biblioteka filmów")
-    
-    watched = multiple_views(list_of_films, 10)
 
+    watched = multiple_views(list_of_films, 10)
+    
     for film in watched:
      print(film)
 
     for z in top_titles(list_of_films, "series"):
         print(z)
+
+   
 
