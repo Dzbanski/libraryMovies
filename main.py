@@ -102,7 +102,7 @@ def search(films):
         
     return f'There is no such a movie or serie'
 
-def top_titles(films, content_type="movies"):
+def top_titles(films, content_type="movies", quant=5):
    x = datetime.datetime.now()
    print("Najpopularniejsze filmy i seriale dnia", x.strftime("%d.%m.%Y"))
 
@@ -111,7 +111,7 @@ def top_titles(films, content_type="movies"):
    else:
        sorted_titles = get_series(films)
                         
-   return sorted(sorted_titles, key=lambda x: x.number_play, reverse=True)[:3]
+   return sorted(sorted_titles, key=lambda x: x.number_play, reverse=True)[:quant]
 
    
 def add_series(films, title, release, species, season, num_i, number_play=0):
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     for film in watched:
      print(film)
 
-    for z in top_titles(list_of_films, "series"):
+    for z in top_titles(list_of_films, "series", 5):
         print(z)
 
    
