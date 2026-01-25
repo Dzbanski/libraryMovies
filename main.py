@@ -111,9 +111,8 @@ def top_titles(films, content_type="movies"):
    else:
        sorted_titles = get_series(films)
                         
-   return sorted(sorted_titles, key=lambda x: x.numer_play, reverse=True)[:3]
+   return sorted(sorted_titles, key=lambda x: x.number_play, reverse=True)[:3]
 
-    
    
 def add_series(films, title, release, species, season, num_i, number_play=0):
     for i in range(1, num_i+1):
